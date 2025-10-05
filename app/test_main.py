@@ -7,9 +7,10 @@ from app.main import outdated_products
 
 
 @pytest.mark.parametrize(
-    "product, expected",
+    "today_date, product, expected",
     [
         (
+            datetime.date(2025, 10, 5),
             [
                 {
                     "name": "salmon",
@@ -36,12 +37,21 @@ from app.main import outdated_products
 )
 def test_outdated_products(
         monkeypatch: MonkeyPatch,
+        today_date: datetime.date,
         product: list,
         expected: list
 
 ) -> None:
+
+    class MockDate:
+
+        @staticmethod
+        def today():
+            return today_date
+
+
     monkeypatch.setattr(
-        main, "outdated_products", outdated_products
+        "app.main.datetime.date", MockDate
     )
 
     assert outdated_products(product) == expected
