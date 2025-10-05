@@ -2,7 +2,6 @@ import pytest
 import datetime
 from _pytest.monkeypatch import MonkeyPatch
 
-from app import main
 from app.main import outdated_products
 
 
@@ -46,9 +45,8 @@ def test_outdated_products(
     class MockDate:
 
         @staticmethod
-        def today():
+        def today() -> datetime.date:
             return today_date
-
 
     monkeypatch.setattr(
         "app.main.datetime.date", MockDate
